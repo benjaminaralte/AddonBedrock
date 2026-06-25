@@ -4656,21 +4656,21 @@ var TRAINING_COSTS = {
   mercenaryViking: { emeralds: 24, iron: 14, gold: 9, diamonds: 6 }
 };
 var TRAINING_TICKS = {
-  cityGuards: 1200,
-  spearmen: 1800,
-  archers: 1600,
-  mountedArcher: 2400,
-  heavyKnight: 6e3,
-  shieldSoldier: 4e3,
-  samurai: 9e3,
-  mercenaryLancer: 8e3,
-  legionary: 8e3,
-  cavalryLancerElite: 1e4,
-  mercenaryRoman: 8e3,
-  mercenaryTemplar: 11e3,
-  mercenarySaracen: 7e3,
-  mercenarySparta: 1e4,
-  mercenaryViking: 9e3
+  cityGuards: 1,
+  spearmen: 1,
+  archers: 1,
+  mountedArcher: 1,
+  heavyKnight: 1,
+  shieldSoldier: 1,
+  samurai: 1,
+  mercenaryLancer: 1,
+  legionary: 1,
+  cavalryLancerElite: 1,
+  mercenaryRoman: 1,
+  mercenaryTemplar: 1,
+  mercenarySaracen: 1,
+  mercenarySparta: 1,
+  mercenaryViking: 1
 };
 var TROOP_LABELS = {
   cityGuards: "City Guard",
@@ -4750,7 +4750,7 @@ function queueTraining(village, troopType, count, currentTick, _playerVillageCou
     cost.diamonds * count > 0 ? `${cost.diamonds * count} diamonds` : ""
   ].filter(Boolean).join(", ");
   const secRemaining = Math.ceil((job.completeTick - currentTick) / 20);
-  notifyPlayer(village.owner, `\xA7a\u{1FA96} Training \xA7f${count} ${label}\xA7a started. Cost: \xA7f${costStr}\xA7a. Ready in \xA7f~${secRemaining}s\xA7a.`);
+  notifyPlayer(village.owner, `\xA7a\u{1FA96} Training \xA7f${count} ${label}\xA7a started! Cost: \xA7f${costStr}\xA7a. Training is \xA7eInstant\xA7a.`);
   return true;
 }
 function tickTraining(village, currentTick) {
@@ -7618,8 +7618,9 @@ async function showVillageSpawnerMenu(player) {
     }
     try {
       const saved = JSON.parse(lastRaw);
-      player.teleport({ x: saved.x, y: saved.y + 1, z: saved.z + 35 });
-      notifyPlayer(player.name, `\xA7aTeleported to \xA7b${saved.type}\xA7a. Gate is just ahead.`);
+      const _gateOff = saved.type === "city" ? 35 : 22;
+      player.teleport({ x: saved.x, y: saved.y + 1, z: saved.z + _gateOff });
+      notifyPlayer(player.name, `\xA7aTeleported to \xA7b${saved.type}\xA7a. The gate is just ahead.`);
     } catch {
       notifyPlayer(player.name, "\xA7cCouldn't read last settlement location.");
     }
@@ -7636,7 +7637,7 @@ async function showVillageSpawnerMenu(player) {
     z: Math.round(loc.z + Math.sin(angle) * dist)
   };
   notifyPlayer(player.name, `\xA77Spawning \xA7b${type}\xA77\u2026 (check ~${dist} blocks away)`);
-  system6.run(() => spawnNpcVillage(dim, anchor, type));
+  system6.run(() => spawnNpcVillage(dim, anchor, type, player));
 }
 function _buildMedievalHouse(b, v, cmd, cx, cz, w, d, wall, post, variant = 0) {
   const hw = Math.floor(w / 2), hd = Math.floor(d / 2);
@@ -7797,14 +7798,45 @@ function _buildTower(b, v, tx, tz, r, h, wall, crown) {
     b(tx + r, h + 1, tz + dz, crown);
   }
 }
-function spawnNpcVillage(dim, anchor, type) {
-  let groundY = anchor.y;
-  try {
-    const top = dim.getTopmostBlock({ x: anchor.x, z: anchor.z });
-    if (top) groundY = top.y;
-  } catch {
+function findFlatSpawnAnchor(dim, origin, spreadDist) {
+  const candidates = [];
+  for (let i = 0; i < 16; i++) {
+    const angle = (i / 16) * Math.PI * 2;
+    const d = spreadDist + (i % 4) * 15;
+    candidates.push({ x: Math.round(origin.x + Math.cos(angle) * d), z: Math.round(origin.z + Math.sin(angle) * d) });
   }
-  const BX = Math.round(anchor.x), BY = groundY, BZ = Math.round(anchor.z);
+  for (const c of candidates) {
+    try {
+      const top = dim.getTopmostBlock({ x: c.x, z: c.z });
+      if (!top) continue;
+      const y = top.y;
+      if (y < 58 || y > 76) continue;
+      const id = top.typeId ?? "";
+      if (id.includes("water") || id.includes("lava")) continue;
+      let maxH = y, minH = y, bad = false;
+      for (const [dx, dz] of [[-18, -18], [18, -18], [-18, 18], [18, 18], [0, -18], [0, 18], [-18, 0], [18, 0]]) {
+        try {
+          const t2 = dim.getTopmostBlock({ x: c.x + dx, z: c.z + dz });
+          if (!t2) { bad = true; break; }
+          const t2id = t2.typeId ?? "";
+          if (t2id.includes("water") || t2id.includes("lava")) { bad = true; break; }
+          if (t2.y > maxH) maxH = t2.y;
+          if (t2.y < minH) minH = t2.y;
+        } catch { bad = true; break; }
+      }
+      if (bad || maxH - minH > 8) continue;
+      return { x: c.x, y, z: c.z };
+    } catch {}
+  }
+  try {
+    const top = dim.getTopmostBlock({ x: origin.x, z: origin.z });
+    if (top) return { x: origin.x, y: top.y, z: origin.z };
+  } catch {}
+  return { x: origin.x, y: origin.y, z: origin.z };
+}
+function spawnNpcVillage(dim, anchor, type, player) {
+  const flat = findFlatSpawnAnchor(dim, anchor, type === "city" ? 80 : 50);
+  const BX = Math.round(flat.x), BY = flat.y, BZ = Math.round(flat.z);
   const ops = [];
   const cmds = [];
   const b = (x, y, z, id) => ops.push([BX + x, BY + y, BZ + z, id]);
@@ -7857,6 +7889,13 @@ function spawnNpcVillage(dim, anchor, type) {
       for (const c of cmds) {
         dim.runCommandAsync(c).catch(() => {
         });
+      }
+      if (player) {
+        try {
+          const gateOff = type === "city" ? 35 : 22;
+          player.teleport({ x: BX, y: BY + 1, z: BZ + gateOff });
+          notifyPlayer(player.name, `\xA7a\u{1F3D9} \xA7b${type === "city" ? "City" : "Village"}\xA7a built! The gate is just ahead of you.`);
+        } catch {}
       }
       for (let i = 0; i < villagerCount; i++) {
         try {
@@ -8636,11 +8675,10 @@ async function showTrainTroopsForm(player, village) {
   ];
   const makeCostLine = (type) => {
     const c = TRAINING_COSTS[type];
-    const secs = Math.ceil(TRAINING_TICKS[type] / 20);
     const parts = [`${c.emeralds} emeralds`, `${c.iron} iron`];
     if (c.gold > 0) parts.push(`${c.gold} gold`);
     if (c.diamonds > 0) parts.push(`${c.diamonds} diamonds`);
-    return `${parts.join(", ")} | ~${secs}s/unit`;
+    return `${parts.join(", ")} | Instant`;
   };
   const rs = village.resourceStorage;
   const queueSummary = getTrainingQueueSummary(village, tick);
