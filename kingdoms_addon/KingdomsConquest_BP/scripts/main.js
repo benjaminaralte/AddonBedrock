@@ -1806,7 +1806,7 @@ function spawnMountedUnit(dim, entityId, offset) {
   return rider;
 }
 function pickupTroops(player, village, pickup) {
-  const total = pickup.cityGuards + pickup.spearmen + pickup.archers + pickup.mountedArcher + pickup.heavyKnight + pickup.shieldSoldier + pickup.samurai + pickup.mercenaryLancer + pickup.legionary + pickup.cavalryLancerElite;
+  const total = pickup.cityGuards + pickup.spearmen + pickup.archers + pickup.mountedArcher + pickup.heavyKnight + pickup.shieldSoldier + pickup.samurai + pickup.mercenaryLancer + pickup.legionary + pickup.cavalryLancerElite + (pickup.mercenaryRoman ?? 0) + (pickup.mercenaryTemplar ?? 0) + (pickup.mercenarySaracen ?? 0) + (pickup.mercenarySparta ?? 0) + (pickup.mercenaryViking ?? 0);
   if (total <= 0) {
     notifyPlayer(player.name, "\xA7cSelect at least one troop to pick up.");
     return false;
@@ -1851,6 +1851,26 @@ function pickupTroops(player, village, pickup) {
     notifyPlayer(player.name, `\xA7cNot enough Cavalry Lancer Elites (have ${village.troops.cavalryLancerElite ?? 0}).`);
     return false;
   }
+  if ((pickup.mercenaryRoman ?? 0) > (village.troops.mercenaryRoman ?? 0)) {
+    notifyPlayer(player.name, `\xA7cNot enough Roman Swordsmen (have ${village.troops.mercenaryRoman ?? 0}).`);
+    return false;
+  }
+  if ((pickup.mercenaryTemplar ?? 0) > (village.troops.mercenaryTemplar ?? 0)) {
+    notifyPlayer(player.name, `\xA7cNot enough Templar Knights (have ${village.troops.mercenaryTemplar ?? 0}).`);
+    return false;
+  }
+  if ((pickup.mercenarySaracen ?? 0) > (village.troops.mercenarySaracen ?? 0)) {
+    notifyPlayer(player.name, `\xA7cNot enough Saracen Warriors (have ${village.troops.mercenarySaracen ?? 0}).`);
+    return false;
+  }
+  if ((pickup.mercenarySparta ?? 0) > (village.troops.mercenarySparta ?? 0)) {
+    notifyPlayer(player.name, `\xA7cNot enough Sparta Elites (have ${village.troops.mercenarySparta ?? 0}).`);
+    return false;
+  }
+  if ((pickup.mercenaryViking ?? 0) > (village.troops.mercenaryViking ?? 0)) {
+    notifyPlayer(player.name, `\xA7cNot enough Viking Axemen (have ${village.troops.mercenaryViking ?? 0}).`);
+    return false;
+  }
   const inv = player.getComponent(EntityInventoryComponent3.componentId);
   if (!inv?.container) {
     notifyPlayer(player.name, "\xA7cInventory unavailable.");
@@ -1867,7 +1887,12 @@ function pickupTroops(player, village, pickup) {
     { itemId: "kingdoms:samurai_token", count: pickup.samurai },
     { itemId: "kingdoms:mercenary_lancer_token", count: pickup.mercenaryLancer },
     { itemId: "kingdoms:legionary_token", count: pickup.legionary },
-    { itemId: "kingdoms:cavalry_lancer_elite_token", count: pickup.cavalryLancerElite }
+    { itemId: "kingdoms:cavalry_lancer_elite_token", count: pickup.cavalryLancerElite },
+    { itemId: "kingdoms:mercenary_roman_token", count: pickup.mercenaryRoman ?? 0 },
+    { itemId: "kingdoms:mercenary_templar_token", count: pickup.mercenaryTemplar ?? 0 },
+    { itemId: "kingdoms:mercenary_saracen_token", count: pickup.mercenarySaracen ?? 0 },
+    { itemId: "kingdoms:mercenary_sparta_token", count: pickup.mercenarySparta ?? 0 },
+    { itemId: "kingdoms:mercenary_viking_token", count: pickup.mercenaryViking ?? 0 }
   ].filter((t) => t.count > 0);
   let slotsNeeded = 0;
   for (const { count } of toGive) slotsNeeded += Math.ceil(count / 64);
@@ -1889,6 +1914,11 @@ function pickupTroops(player, village, pickup) {
   village.troops.mercenaryLancer = (village.troops.mercenaryLancer ?? 0) - pickup.mercenaryLancer;
   village.troops.legionary = (village.troops.legionary ?? 0) - pickup.legionary;
   village.troops.cavalryLancerElite = (village.troops.cavalryLancerElite ?? 0) - pickup.cavalryLancerElite;
+  village.troops.mercenaryRoman = (village.troops.mercenaryRoman ?? 0) - (pickup.mercenaryRoman ?? 0);
+  village.troops.mercenaryTemplar = (village.troops.mercenaryTemplar ?? 0) - (pickup.mercenaryTemplar ?? 0);
+  village.troops.mercenarySaracen = (village.troops.mercenarySaracen ?? 0) - (pickup.mercenarySaracen ?? 0);
+  village.troops.mercenarySparta = (village.troops.mercenarySparta ?? 0) - (pickup.mercenarySparta ?? 0);
+  village.troops.mercenaryViking = (village.troops.mercenaryViking ?? 0) - (pickup.mercenaryViking ?? 0);
   saveVillage(village);
   for (const { itemId, count } of toGive) {
     let remaining = count;
@@ -1989,7 +2019,12 @@ var ENTITY_TO_TOKEN = {
   "kingdoms:samurai": "kingdoms:samurai_token",
   "kingdoms:mercenary_lancer": "kingdoms:mercenary_lancer_token",
   "kingdoms:legionary": "kingdoms:legionary_token",
-  "kingdoms:cavalry_lancer_elite": "kingdoms:cavalry_lancer_elite_token"
+  "kingdoms:cavalry_lancer_elite": "kingdoms:cavalry_lancer_elite_token",
+  "kingdoms:mercenary_roman": "kingdoms:mercenary_roman_token",
+  "kingdoms:mercenary_templar": "kingdoms:mercenary_templar_token",
+  "kingdoms:mercenary_saracen": "kingdoms:mercenary_saracen_token",
+  "kingdoms:mercenary_sparta": "kingdoms:mercenary_sparta_token",
+  "kingdoms:mercenary_viking": "kingdoms:mercenary_viking_token"
 };
 var RECALL_RADIUS = 48;
 function recallNearbyTroops(player) {
@@ -2067,7 +2102,12 @@ function garrisonDeployedSoldiers(attackerName, village, dimension) {
     "kingdoms:samurai": "samurai",
     "kingdoms:mercenary_lancer": "mercenaryLancer",
     "kingdoms:legionary": "legionary",
-    "kingdoms:cavalry_lancer_elite": "cavalryLancerElite"
+    "kingdoms:cavalry_lancer_elite": "cavalryLancerElite",
+    "kingdoms:mercenary_roman": "mercenaryRoman",
+    "kingdoms:mercenary_templar": "mercenaryTemplar",
+    "kingdoms:mercenary_saracen": "mercenarySaracen",
+    "kingdoms:mercenary_sparta": "mercenarySparta",
+    "kingdoms:mercenary_viking": "mercenaryViking"
   };
   const loc = village.townHallLocation;
   let total = 0;
@@ -2102,7 +2142,12 @@ function countTroopTokens(player) {
     samurai: 0,
     mercenaryLancer: 0,
     legionary: 0,
-    cavalryLancerElite: 0
+    cavalryLancerElite: 0,
+    mercenaryRoman: 0,
+    mercenaryTemplar: 0,
+    mercenarySaracen: 0,
+    mercenarySparta: 0,
+    mercenaryViking: 0
   };
   if (!inv?.container) return result;
   const container = inv.container;
@@ -8457,7 +8502,12 @@ async function showPickUpTroopsForm(player, village) {
   const ml2 = t.mercenaryLancer ?? 0;
   const lg2 = t.legionary ?? 0;
   const cle = t.cavalryLancerElite ?? 0;
-  const total = t.cityGuards + t.spearmen + t.archers + t.mountedArcher + hk + ss + sm2 + ml2 + lg2 + cle;
+  const mr = t.mercenaryRoman ?? 0;
+  const mt = t.mercenaryTemplar ?? 0;
+  const msr = t.mercenarySaracen ?? 0;
+  const msp = t.mercenarySparta ?? 0;
+  const mv = t.mercenaryViking ?? 0;
+  const total = t.cityGuards + t.spearmen + t.archers + t.mountedArcher + hk + ss + sm2 + ml2 + lg2 + cle + mr + mt + msr + msp + mv;
   if (total === 0) {
     notifyPlayer(player.name, `\xA7cNo troops stationed in \xA7b${village.name}\xA7c to pick up.`);
     return;
@@ -8472,7 +8522,12 @@ async function showPickUpTroopsForm(player, village) {
     { key: "samurai", label: "Samurai", count: sm2 },
     { key: "mercenaryLancer", label: "Mercenary Lancers", count: ml2 },
     { key: "legionary", label: "Legionaries", count: lg2 },
-    { key: "cavalryLancerElite", label: "Cavalry Lancer Elites", count: cle }
+    { key: "cavalryLancerElite", label: "Cavalry Lancer Elites", count: cle },
+    { key: "mercenaryRoman", label: "Roman Swordsmen", count: mr },
+    { key: "mercenaryTemplar", label: "Templar Knights", count: mt },
+    { key: "mercenarySaracen", label: "Saracen Warriors", count: msr },
+    { key: "mercenarySparta", label: "Sparta Elites", count: msp },
+    { key: "mercenaryViking", label: "Viking Axemen", count: mv }
   ].filter((e) => e.count > 0);
   const form = new ModalFormData().title(`\u2694 Pick Up Troops \u2014 ${village.name}`);
   for (const e of entries) {
@@ -8491,7 +8546,12 @@ async function showPickUpTroopsForm(player, village) {
     samurai: 0,
     mercenaryLancer: 0,
     legionary: 0,
-    cavalryLancerElite: 0
+    cavalryLancerElite: 0,
+    mercenaryRoman: 0,
+    mercenaryTemplar: 0,
+    mercenarySaracen: 0,
+    mercenarySparta: 0,
+    mercenaryViking: 0
   };
   entries.forEach((e, i) => {
     pickup[e.key] = values[i] ?? 0;
@@ -8506,7 +8566,12 @@ async function showReturnTroopsForm(player, village) {
   const mlCarried = carried.mercenaryLancer ?? 0;
   const lgCarried = carried.legionary ?? 0;
   const cleCarried = carried.cavalryLancerElite ?? 0;
-  const total = carried.cityGuards + carried.spearmen + carried.archers + carried.mountedArcher + hkCarried + ssCarried + smCarried + mlCarried + lgCarried + cleCarried;
+  const mrCarried = carried.mercenaryRoman ?? 0;
+  const mtCarried = carried.mercenaryTemplar ?? 0;
+  const msrCarried = carried.mercenarySaracen ?? 0;
+  const mspCarried = carried.mercenarySparta ?? 0;
+  const mvCarried = carried.mercenaryViking ?? 0;
+  const total = carried.cityGuards + carried.spearmen + carried.archers + carried.mountedArcher + hkCarried + ssCarried + smCarried + mlCarried + lgCarried + cleCarried + mrCarried + mtCarried + msrCarried + mspCarried + mvCarried;
   if (total === 0) {
     notifyPlayer(player.name, "\xA7cYou are not carrying any troops.");
     return;
@@ -8525,6 +8590,11 @@ async function showReturnTroopsForm(player, village) {
   Mercenary Lancers: ${mlCarried}
   Legionaries: ${lgCarried}
   Cavalry Lancer Elites: ${cleCarried}
+  Roman Swordsmen: ${mrCarried}
+  Templar Knights: ${mtCarried}
+  Saracen Warriors: ${msrCarried}
+  Sparta Elites: ${mspCarried}
+  Viking Axemen: ${mvCarried}
 
 \xA7aTotal: ${total} troops`
   ).button("Return All Troops").button("Cancel");
