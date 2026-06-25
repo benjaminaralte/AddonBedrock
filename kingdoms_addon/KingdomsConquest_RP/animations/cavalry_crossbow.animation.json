@@ -1,0 +1,46 @@
+{
+    "format_version": "1.8.0",
+    "animations": {
+        "animation.cavalry_crossbow.attack": {
+            "loop": "hold_on_last_frame",
+            "animation_length": 0.5,
+            "bones": {
+                "Right_Arm": {
+                    "rotation": {
+                        "0.0": [0, 0, 0],
+                        "0.25": [-80, 0, 0],
+                        "0.5": [-80, 0, 0]
+                    }
+                },
+                "Right_Arm_Down": {
+                    "rotation": {
+                        "0.0": [0, 0, 0],
+                        "0.25": [10, 0, -10],
+                        "0.5": [10, 0, -10]
+                    }
+                },
+                "Left_Arm": {
+                    "rotation": {
+                        "0.0": [0, 0, 0],
+                        "0.25": [-70, 0, 15],
+                        "0.5": [-70, 0, 15]
+                    }
+                },
+                "Left_Arm_Down": {
+                    "rotation": {
+                        "0.0": [0, 0, 0],
+                        "0.25": [5, 0, 0],
+                        "0.5": [5, 0, 0]
+                    }
+                },
+                "head": {
+                    "rotation": {
+                        "0.0": [0, 0, 0],
+                        "0.25": [-10, 0, 0],
+                        "0.5": [-10, 0, 0]
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,41 +1,39 @@
 {
-  "format_version": "1.10.0",
-  "minecraft:client_entity": {
-    "description": {
-      "identifier": "kingdoms:cavalry",
-      "min_engine_version": "1.16.0",
-      "materials": {
-        "default": "skeleton"
-      },
-      "textures": {
-        "var0": "textures/entity/pn_viking_footman",
-        "var1": "textures/entity/pn_viking_footman"
-      },
-      "geometry": {
-        "default": "geometry.viking_footman"
-      },
-      "scripts": {
-        "animate": [
-          "movement_ctrl",
-          "setup"
-        ]
-      },
-      "animations": {
-        "attack": "animation.mercenary_viking_footman.attack",
-        "bobing": "animation.mercenary_viking.idle",
-        "setup": "controller.animation.pn_roman.setup",
-        "move": "animation.mercenary_viking.move",
-        "move_target": "animation.mercenary_viking.move_target",
-        "target": "animation.mercenary_viking.stay_target",
-        "movement_ctrl": "controller.animation.got_troop2"
-      },
-      "render_controllers": [
-        "controller.render.mercenary_pn.viking"
-      ],
-      "spawn_egg": {
-        "texture": "cavalry_spawn_egg",
-        "texture_index": 0
-      }
+    "format_version": "1.10.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "kingdoms:cavalry",
+            "min_engine_version": "1.16.0",
+            "materials": {
+                "default": "skeleton"
+            },
+            "textures": {
+                "var0": "textures/entity/cavalry_crossbow/default",
+                "var1": "textures/entity/cavalry_crossbow/default"
+            },
+            "geometry": {
+                "default": "geometry.villager_knight"
+            },
+            "scripts": {
+                "animate": [
+                    "setup",
+                    "look_at_target"
+                ]
+            },
+            "animations": {
+                "idle":           "animation.alex_villager_knight.idle",
+                "move":           "animation.alex_villager_knight.running",
+                "attack":         "animation.cavalry_crossbow.attack",
+                "setup":          "controller.animation.kingdoms.cavalry_lancer_elite",
+                "look_at_target": "animation.common.look_at_target"
+            },
+            "render_controllers": [
+                "controller.render.kingdoms.cavalry_lancer_elite"
+            ],
+            "spawn_egg": {
+                "texture": "cavalry_spawn_egg",
+                "texture_index": 0
+            }
+        }
     }
-  }
 }
