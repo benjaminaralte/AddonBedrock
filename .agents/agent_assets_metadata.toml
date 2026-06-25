@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "KofESHoJFspnAB7V7FfXy"
+uri = "file://attached_assets/kingdoms-conquest-FIXED.zip"
+type = "unspecified"
+title = "kingdoms-conquest-FIXED.zip"

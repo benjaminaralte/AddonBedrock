@@ -1,0 +1,22 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "kingdoms:trade_cart",
+      "min_engine_version": "1.16.0",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/entity/llama/llama_creamy" },
+      "geometry": { "default": "geometry.llama" },
+      "animations": {
+        "walk": "animation.llama.walk",
+        "idle": "animation.llama.idle",
+        "chest": "animation.llama.chest",
+        "move": "controller.animation.llama.general"
+      },
+      "scripts": {
+        "animate": [ "move" ]
+      },
+      "render_controllers": [ "controller.render.llama" ]
+    }
+  }
+}
