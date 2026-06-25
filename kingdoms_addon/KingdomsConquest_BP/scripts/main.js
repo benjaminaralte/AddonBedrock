@@ -6473,6 +6473,10 @@ var FORMATION_TARGETS = {
     "kingdoms:legionary",
     "kingdoms:shield_soldier",
     "kingdoms:mercenary_roman",
+    "kingdoms:mercenary_templar",
+    "kingdoms:mercenary_saracen",
+    "kingdoms:mercenary_sparta",
+    "kingdoms:mercenary_viking",
     "kingdoms:city_guard"
   ]
 };
