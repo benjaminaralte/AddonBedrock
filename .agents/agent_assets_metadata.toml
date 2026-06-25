@@ -12,3 +12,9 @@ id = "xOk5PdCpqdUcIzcLGiHsc"
 uri = "file://KingdomsConquest.zip"
 type = "unspecified"
 title = "KingdomsConquest.mcaddon (download as zip, rename to .mcaddon)"
+
+[[outputs]]
+id = "HpkuWtgMcE3ZXEZVwpDLF"
+uri = "file://KingdomsConquest_download.zip"
+type = "unspecified"
+title = "KingdomsConquest.mcaddon (download)"
