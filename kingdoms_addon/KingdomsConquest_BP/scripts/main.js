@@ -6460,8 +6460,8 @@ var FORMATION_TARGETS = {
   cavalry_escort: ["kingdoms:cavalry", "kingdoms:mercenary_lancer", "kingdoms:cavalry_lancer_elite"],
   archer_arc: ["kingdoms:archer"],
   archer_scatter: ["kingdoms:archer"],
-  heavy_vanguard: ["kingdoms:heavy_knight", "kingdoms:samurai", "kingdoms:legionary"],
-  heavy_bodyguard: ["kingdoms:heavy_knight", "kingdoms:samurai", "kingdoms:legionary"],
+  heavy_vanguard: ["kingdoms:heavy_knight", "kingdoms:samurai", "kingdoms:legionary", "kingdoms:shield_soldier", "kingdoms:mercenary_roman"],
+  heavy_bodyguard: ["kingdoms:heavy_knight", "kingdoms:samurai", "kingdoms:legionary", "kingdoms:shield_soldier", "kingdoms:mercenary_roman"],
   all_rally: [
     "kingdoms:spearman",
     "kingdoms:cavalry",
@@ -6471,6 +6471,8 @@ var FORMATION_TARGETS = {
     "kingdoms:heavy_knight",
     "kingdoms:samurai",
     "kingdoms:legionary",
+    "kingdoms:shield_soldier",
+    "kingdoms:mercenary_roman",
     "kingdoms:city_guard"
   ]
 };
