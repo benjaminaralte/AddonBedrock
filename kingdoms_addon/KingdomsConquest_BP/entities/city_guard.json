@@ -28,6 +28,10 @@
       "minecraft:movement": {
         "value": 0.17
       },
+      "minecraft:follow_range": {
+        "value": 24,
+        "max": 24
+      },
       "minecraft:navigation.walk": {
         "can_path_over_water": false,
         "avoid_water": true,
@@ -49,7 +53,9 @@
       },
       "minecraft:behavior.melee_attack": {
         "priority": 3,
-        "speed_multiplier": 1
+        "speed_multiplier": 1.0,
+        "track_target": true,
+        "reach_multiplier": 1.0
       },
       "minecraft:behavior.defend_village_target": {
         "priority": 1,
@@ -79,21 +85,24 @@
             "max_dist": 16
           }
         ],
-        "scan_interval": 20,
+        "scan_interval": 32,
         "must_see_forget_duration": 3
       },
       "minecraft:behavior.look_at_player": {
         "priority": 8,
-        "look_distance": 6
+        "look_distance": 6,
+        "probability": 0.02
       },
       "minecraft:behavior.random_look_around": {
-        "priority": 9
+        "priority": 9,
+        "random_look_around_time": 5.0
       },
       "minecraft:behavior.random_stroll": {
         "priority": 7,
         "speed_multiplier": 0.8,
-        "xz_dist": 4,
-        "y_dist": 2
+        "xz_dist": 5,
+        "y_dist": 2,
+        "interval": 140
       }
     }
   }

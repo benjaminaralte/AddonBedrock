@@ -22,8 +22,15 @@
         "value": 30,
         "max": 30
       },
+      "minecraft:attack": {
+        "damage": 6
+      },
       "minecraft:movement": {
         "value": 0.25
+      },
+      "minecraft:follow_range": {
+        "value": 24,
+        "max": 24
       },
       "minecraft:navigation.walk": {
         "can_path_over_water": false,
@@ -33,6 +40,10 @@
       "minecraft:movement.basic": {},
       "minecraft:jump.static": {},
       "minecraft:physics": {},
+      "minecraft:pushable": {
+        "is_pushable": true,
+        "is_pushable_by_piston": true
+      },
       "minecraft:nameable": {},
       "minecraft:loot": {
         "table": "loot_tables/entities/guard.json"
@@ -40,15 +51,11 @@
       "minecraft:behavior.float": {
         "priority": 0
       },
-      "minecraft:behavior.ranged_attack": {
+      "minecraft:behavior.melee_attack": {
         "priority": 3,
         "speed_multiplier": 1.2,
-        "attack_interval_min": 0.8,
-        "attack_interval_max": 1.5,
-        "attack_radius": 18
-      },
-      "minecraft:shooter": {
-        "def": "minecraft:arrow"
+        "track_target": true,
+        "reach_multiplier": 1.0
       },
       "minecraft:behavior.defend_village_target": {
         "priority": 1,
@@ -78,14 +85,24 @@
             "max_dist": 24
           }
         ],
-        "scan_interval": 20,
+        "scan_interval": 22,
         "must_see_forget_duration": 3
+      },
+      "minecraft:behavior.look_at_player": {
+        "priority": 8,
+        "look_distance": 8,
+        "probability": 0.02
+      },
+      "minecraft:behavior.random_look_around": {
+        "priority": 9,
+        "random_look_around_time": 2.5
       },
       "minecraft:behavior.random_stroll": {
         "priority": 7,
-        "speed_multiplier": 1,
-        "xz_dist": 4,
-        "y_dist": 2
+        "speed_multiplier": 1.0,
+        "xz_dist": 8,
+        "y_dist": 2,
+        "interval": 90
       }
     }
   }
