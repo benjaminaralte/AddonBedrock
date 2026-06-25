@@ -6453,9 +6453,9 @@ var HOLD_MODES = /* @__PURE__ */ new Set([
   "heavy_bodyguard"
 ]);
 var FORMATION_TARGETS = {
-  spear_line_attack: ["kingdoms:spearman"],
-  spear_line_hold: ["kingdoms:spearman"],
-  spear_perimeter: ["kingdoms:spearman"],
+  spear_line_attack: ["kingdoms:spearman", "kingdoms:mercenary_saracen"],
+  spear_line_hold: ["kingdoms:spearman", "kingdoms:mercenary_saracen"],
+  spear_perimeter: ["kingdoms:spearman", "kingdoms:mercenary_saracen"],
   cavalry_flanks: ["kingdoms:cavalry", "kingdoms:mercenary_lancer", "kingdoms:cavalry_lancer_elite"],
   cavalry_escort: ["kingdoms:cavalry", "kingdoms:mercenary_lancer", "kingdoms:cavalry_lancer_elite"],
   archer_arc: ["kingdoms:archer"],
