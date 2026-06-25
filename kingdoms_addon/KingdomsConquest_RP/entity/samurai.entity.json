@@ -11,7 +11,7 @@
         "var1": "textures/entity/pn_samurai_naginata"
       },
       "geometry": {
-        "default": "geometry.samurai_naginata"
+        "default": "geometry.pn_samurai2"
       },
       "scripts": {
         "animate": [

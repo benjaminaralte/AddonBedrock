@@ -8,8 +8,8 @@
         "default": "skeleton"
       },
       "textures": {
-        "var0": "textures/entity/pn_templar_backup",
-        "var1": "textures/entity/pn_templar_backup"
+        "var0": "textures/entity/pn_templar_swordman",
+        "var1": "textures/entity/pn_templar_swordman"
       },
       "geometry": {
         "default": "geometry.templar_bodyguard"

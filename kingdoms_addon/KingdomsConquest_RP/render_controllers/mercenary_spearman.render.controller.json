@@ -1,4 +1,3 @@
-//bridge-file-version: #65
 {
 	"format_version": "1.8.0",
 	"render_controllers": {
@@ -37,6 +36,31 @@
 					"sword_handle": "query.has_target || variable.attack_time > 0.0"
 				}
 			]
+		},
+		"controller.render.mercenary_pn.roman_spear": {
+			"arrays": {
+				"textures": {
+					"Array.skins": [
+						"Texture.var0",
+						"Texture.var1"
+					]
+				}
+			},
+			"geometry": "Geometry.default",
+			"textures": [
+				"Array.skins[query.variant]"
+			],
+			"materials": [
+				{
+					"*": "Material.default"
+				}
+			],
+			"is_hurt_color": {
+				"r": 0,
+				"g": 0,
+				"b": 0,
+				"a": 0
+			}
 		}
 	}
 }
