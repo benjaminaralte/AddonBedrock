@@ -8,11 +8,11 @@
         "default": "skeleton"
       },
       "textures": {
-        "var0": "textures/entity/pn_roman",
-        "var1": "textures/entity/pn_roman"
+        "var0": "textures/entity/pn_viking_footman",
+        "var1": "textures/entity/pn_viking_footman"
       },
       "geometry": {
-        "default": "geometry.mercenary_roman_bow"
+        "default": "geometry.viking_footman"
       },
       "scripts": {
         "animate": [
@@ -21,16 +21,16 @@
         ]
       },
       "animations": {
-        "attack": "animation.roman_bowman.attack",
-        "bobing": "animation.roman_bowman.idle",
+        "attack": "animation.mercenary_viking_footman.attack",
+        "bobing": "animation.mercenary_viking.idle",
         "setup": "controller.animation.pn_roman.setup",
-        "move": "animation.roman_bowman.move",
-        "move_target": "animation.roman_bowman.move_target",
-        "target": "animation.roman_bowman.target",
+        "move": "animation.mercenary_viking.move",
+        "move_target": "animation.mercenary_viking.move_target",
+        "target": "animation.mercenary_viking.stay_target",
         "movement_ctrl": "controller.animation.got_troop2"
       },
       "render_controllers": [
-        "controller.render.got1"
+        "controller.render.mercenary_pn.viking"
       ],
       "spawn_egg": {
         "texture": "cavalry_spawn_egg",
